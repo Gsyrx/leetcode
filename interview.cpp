@@ -191,3 +191,95 @@ public:
     return {a, b};
   }
 };
+
+/*   <<<<<--------------------------  Reverse Vowels of a String -------------------------------------------->>>>>
+
+Given a string s, reverse only all the vowels in the string and return it.
+
+The vowels are 'a', 'e', 'i', 'o', and 'u', and they can appear in both lower and upper cases, more than once.
+
+
+
+Example 1:
+
+Input: s = "hello"
+Output: "holle"
+Example 2:
+
+Input: s = "leetcode"
+Output: "leotcede"
+
+*/
+
+class Solution
+{
+public:
+  bool isvowel(char ch)
+  {
+    ch = tolower(ch);
+    return ch == 'a' || ch == 'e' || ch == 'o' || ch == 'i' || ch == 'u';
+  }
+  string reverseVowels(string s)
+  {
+    int n = s.length();
+    int i = 0;
+    int j = n - 1;
+    while (i < j)
+    {
+      if (!isvowel(s[i]))
+        i++;
+      else if (!isvowel(s[j]))
+        j--;
+      else if (i < j)
+      {
+        swap(s[i], s[j]);
+        i++;
+        j--;
+      }
+    }
+    return s;
+  }
+};
+
+// 2nd soln.
+class Solution
+{
+public:
+  string reverseVowels(string s)
+  {
+    unordered_set<char> ch = {'a', 'A', 'e', 'E', 'i', 'I', 'o', 'O', 'u', 'U'};
+
+    int i = 0;
+    int j = s.length() - 1;
+
+    while (i < j)
+    {
+      // while(!ch.count(s[i])&&i<j){
+      //     i++;
+      // }
+      // while(!ch.count(s[j])&&i<j){
+      //     j--;
+      // }
+      // swap(s[i],s[j]);
+      // i++;
+      // j--;
+
+      if (!ch.count(s[i]))
+      {
+        i++;
+      }
+      else if (!ch.count(s[j]))
+      {
+        j--;
+      }
+      else if (i < j)
+      {
+        swap(s[i], s[j]);
+        i++;
+        j--;
+      }
+    }
+
+    return s;
+  }
+};
