@@ -257,3 +257,286 @@ void leftRotateByOne(int arr[], int size)
 
     return res;
   }
+
+  // frequency in a sorted array
+  //   Input: arr[] = {1, 1, 1, 2, 3, 3, 5, 5, 8, 8, 8, 9, 9, 10}
+  // Output:       Frequency of 1 is: 3
+  //               Frequency of 2 is: 1
+  //               Frequency of 3 is: 2
+  //               Frequency of 5 is: 2
+  //               Frequency of 8 is: 3
+  //               Frequency of 9 is: 2
+  //               Frequency of 10 is: 1
+
+  void printFreq(int arr[], int n)
+  {
+    int currElement = arr[0];
+    int count = 1;
+
+    for (int i = 1; i < n; i++)
+    {
+      if (arr[i] == currElement)
+      {
+        count++;
+      }
+      else
+      {
+        cout << "Element " << currentElement << ": " << count << " times" << endl;
+        currElement = arr[i];
+        count = 1;
+      }
+    }
+    cout << "Element " << currentElement << ": " << count << " times" << endl; // for last element
+  }
+
+  // stock buy and sell problem
+  //   Input: arr[] = {100, 180, 260, 310, 40, 535, 695}
+  // Output: 865
+  // Explanation: Buy the stock on day 0 and sell it on day 3 => 310 – 100 = 210
+  //                        Buy the stock on day 4 and sell it on day 6 => 695 – 40 = 655
+  //                        Maximum Profit  = 210 + 655 = 865
+
+  int maxProfit(int price[], int n)
+  {
+    int profit = 0;
+
+    for (int i = 1; i < n; i++)
+    {
+      if (price[i] > price[i - 1])
+      {
+        profit += price[i] - price[i - 1];
+      }
+    }
+
+    return profit;
+  }
+
+  // Trapping Rain Water
+  // Input: arr[]   = {3, 0, 2, 0, 4}
+  // Output: 7
+  // Explanation: Structure is like below.
+  // We can trap “3 units” of water between 3 and 2,
+  // “1 unit” on top of bar 2 and “3 units” between 2 and 4.
+
+  // n*2
+  int getWater(int arr[], int n)
+  {
+    int res = 0;
+
+    for (int i = 1; i < n - 1; i++)
+    {
+      int lMax = arr[i];
+      for (int j = 0; j < i; j++)
+      {
+        lMax = max(lMax, arr[j]);
+      }
+
+      int rMax = arr[i];
+      for (int j = i + 1; j < n; j++)
+      {
+        rMax = max(rMax, arr[j]);
+      }
+
+      res = res + (min(lMax, rMax) - arr[i]);
+    }
+
+    return res;
+  }
+
+  // efficient
+  int getWater(int arr[], int n)
+  {
+    int res = 0;
+
+    for (int i = 1; i < n - 1; i++)
+    {
+      int res = 0;
+
+      int lMax[n];
+      int rMax[n];
+
+      lMax[0] = arr[0];
+      for (int i = 1; i < n; i++)
+        lMax[i] = max(arr[i], lMax[i - 1]);
+
+      rMax[n - 1] = arr[n - 1];
+      for (int i = n - 2; i >= 0; i--)
+        rMax[i] = max(arr[i], rMax[i + 1]);
+
+      for (int i = 1; i < n - 1; i++)
+        res = res + (min(lMax[i], rMax[i]) - arr[i]);
+
+      return res;
+    }
+
+    return res;
+  }
+
+  // maximum cons. ones
+  //   Input: arr[] = {1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1}
+  // Output: 4
+
+  int maxConsecutiveOnes(int arr[], int n)
+  {
+    int res = 0, curr = 0;
+
+    for (int i = 0; i < n; i++)
+    {
+      if (arr[i] == 0)
+        curr = 0;
+      else
+      {
+        curr++;
+
+        res = max(res, curr);
+      }
+    }
+
+    return res;
+  }
+  // 2nd sol.
+
+  int findMaxConsecutiveOnes(int arr[], int n)
+  {
+    int maxConsecutive = 0;
+    int currentConsecutive = 0;
+
+    for (int i = 0; i < n; i++)
+    {
+      if (arr[i] == 1)
+      {
+
+        currentConsecutive++;
+      }
+      else
+      {
+
+        maxConsecutive = max(maxConsecutive, currentConsecutive);
+        currentConsecutive = 0;
+      }
+    }
+
+    // Update the maximum consecutive count after the loop (in case the last element is 1).
+    maxConsecutive = max(maxConsecutive, currentConsecutive);
+
+    return maxConsecutive;
+  }
+
+  // longest even odd subarray
+  //   Input: a[] = {1, 2, 3, 4, 5, 7, 9}
+  // Output: 5
+  // Explanation:
+  // The subarray {1, 2, 3, 4, 5} has alternating even and odd elements.
+
+  int longestEvenOddSubarray(int arr[], int n)
+  {
+
+    int maxLength = 1;
+    int currentLength = 1;
+
+    for (int i = 1; i < n; ++i)
+    {
+      if ((arr[i] % 2 == 0 && arr[i - 1] % 2 != 0) || (arr[i] % 2 != 0 && arr[i - 1] % 2 == 0))
+      {
+        currentLength++;
+        maxLength = max(maxLength, currentLength);
+      }
+      else
+      {
+        currentLength = 1;
+      }
+    }
+
+    return maxLength;
+  }
+
+  // Maximum subarray sum (kadane algorithm)
+  //   Input: arr = [-2, -3, 4, -1, -2, 1, 5, -3]
+  // Output: [4, -1, -2, 1, 5]
+  // Explanation:
+  // In the above input, the maximum contiguous subarray sum is 7 and the elements of the subarray are [4, -1, -2, 1, 5]
+
+  // efficient (kadane algorithm)
+  int maxSubArraySum(int arr[], int n)
+  {
+    int currentSum = arr[0];
+    int maxSum = arr[0];
+
+    for (int i = 1; i < n; i++)
+    {
+
+      currentSum = max(arr[i], currentSum + arr[i]);
+
+      maxSum = max(maxSum, currentSum);
+    }
+
+    return maxSum;
+  }
+
+  // naive
+  int maxSum(int arr[], int n)
+  {
+    int res = arr[0];
+    for (int i = 0; i < n; i++)
+    {
+      int curr = 0;
+      for (int j = i + 1; j < n; j++)
+      {
+        curr += arr[j];
+        res = max(res, curr);
+      }
+    }
+
+    return res;
+  }
+
+  // Maximum Circular Sum Subarray
+
+  //   Input: arr[] = {8, -8, 9, -9, 10, -11, 12}
+  // Output: 22
+  // Explanation: Subarray 12, 8, -8, 9, -9, 10 gives the maximum sum, that is 22.
+
+  // Input: arr[] = {10, -3, -4, 7, 6, 5, -4, -1}
+  // Output:  23
+  // Explanation: Subarray 7, 6, 5, -4, -1, 10 gives the maximum sum, that is 23.
+
+  // Input: arr[] = {-1, 40, -14, 7, 6, 5, -4, -1}
+  // Output: 52
+  // Explanation: Subarray 7, 6, 5, -4, -1, -1, 40 gives the maximum sum, that is 52.
+
+  int normalMaxSum(int arr[], int n)
+  {
+    int currentSum = arr[0];
+    int maxSum = arr[0];
+
+    for (int i = 1; i < n; i++)
+    {
+
+      currentSum = max(arr[i], currentSum + arr[i]);
+
+      maxSum = max(maxSum, currentSum);
+    }
+
+    return maxSum;
+  }
+
+  int overallMaxSum(int arr[], int n)
+  {
+    int max_normal = normalMaxSum(arr, n);
+
+    if (max_normal < 0) // it means all elements in the array are negative
+      return max_normal;
+
+    int arr_sum = 0;
+
+    for (int i = 0; i < n; i++)
+    {
+      arr_sum += arr[i];
+
+      arr[i] = -arr[i];
+    }
+
+    int max_circular = arr_sum + normalMaxSum(arr, n);
+
+    return max(max_circular, max_normal);
+  }
