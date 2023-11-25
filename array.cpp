@@ -540,3 +540,302 @@ void leftRotateByOne(int arr[], int size)
 
     return max(max_circular, max_normal);
   }
+
+  // majority element
+  // (A majority element in an array A[] of size n is an element that appears more than n/2 times (and hence there is at most one such element).)
+  //   Examples :
+
+  // Input : {3, 3, 4, 2, 4, 4, 2, 4, 4}
+  // Output : 4
+  // Explanation: The frequency of 4 is 5 which is greater than the half of the size of the array size.
+
+  // Input : {3, 3, 4, 2, 4, 4, 2, 4}
+  // Output : No Majority Element
+  // Explanation: There is no element whose frequency is greater than the half of the size of the array size.
+
+  // naive
+  int findMajority(int arr[], int n)
+  {
+    for (int i = 0; i < n; i++)
+    {
+      int count = 1;
+
+      for (int j = i + 1; j < n; j++)
+      {
+        if (arr[i] == arr[j])
+          count++;
+      }
+
+      if (count > n / 2)
+        return i;
+    }
+
+    return -1;
+  }
+
+  // efficient
+
+  int findMajority(int arr[], int n)
+  {
+    int res = 0, count = 1;
+    for (int i = 1; i < n; i++)
+    {
+      if (arr[res] == arr[i])
+      {
+        count++;
+      }
+      else
+      {
+        count--;
+      }
+
+      if (count == 0)
+      {
+        res = i;
+        count = 1;
+      }
+    }
+
+    int count = 0;
+    for (int i = 0; i < n; i++)
+    {
+      if (arr[res] == arr[i])
+      {
+        count++;
+      }
+    }
+
+    if (count <= n / 2)
+      res = -1;
+
+    return res;
+  }
+
+  // Given an array of integers of size 'n'. Our aim is to calculate the maximum sum of 'k' consecutive elements in the array.
+  // Input  : arr[] = {100, 200, 300, 400}
+  //          k = 2
+  // Output : 700
+
+  // Input  : arr[] = {1, 4, 2, 10, 23, 3, 1, 0, 20}
+  //          k = 4
+  // Output : 39
+  // We get maximum sum by adding subarray {4, 2, 10, 23}
+  // of size 4.
+
+  // Window Sliding Problem
+
+  int maxSum(int arr[], int n, int k)
+  {
+    int currSum = 0;
+    for (int i = 0; i < k; i++)
+    {
+      currSum += arr[i];
+    }
+
+    int maxSum = currSum;
+
+    for (int i = k; i < n; i++)
+    {
+      currSum += arr[i] - arr[i - k];
+      maxSum = max(maxSum, currSum);
+    }
+
+    return maxSum;
+  }
+
+  // subarray with given sum
+  // Input: arr[] = {1, 4, 20, 3, 10, 5}, sum = 33
+  // Output: Sum found between indexes 2 and 4
+  // Explanation: Sum of elements between indices 2 and 4 is 20 + 3 + 10 = 33
+
+  // Input: arr[] = {1, 4, 0, 0, 3, 10, 5}, sum = 7
+  // Output: Sum found between indexes 1 and 4
+  // Explanation: Sum of elements between indices 1 and 4 is 4 + 0 + 0 + 3 = 7
+
+  // Input: arr[] = {1, 4}, sum = 0
+  // Output: No subarray found
+  // Explanation: There is no subarray with 0 sum
+
+#include <iostream>
+#include <vector>
+
+  std::pair<int, int> subarrayWithSum(const std::vector<int> &nums, int targetSum)
+  {
+    int start = 0;
+    int end = 0;
+    int currentSum = 0;
+
+    while (end < nums.size())
+    {
+      currentSum += nums[end];
+
+      while (currentSum > targetSum)
+      {
+        // If the current sum is greater than the target sum,
+        // move the start pointer to the right to reduce the sum.
+        currentSum -= nums[start];
+        start++;
+      }
+
+      if (currentSum == targetSum)
+      {
+        // Found a subarray with the given sum
+        return std::make_pair(start, end);
+      }
+
+      end++;
+    }
+
+    // If no subarray is found
+    return std::make_pair(-1, -1);
+  }
+
+  int main()
+  {
+    // Example usage
+    std::vector<int> nums = {1, 4, 20, 3, 10, 5};
+    int targetSum = 33;
+
+    std::pair<int, int> result = subarrayWithSum(nums, targetSum);
+
+    if (result.first != -1 && result.second != -1)
+    {
+      std::cout << "Subarray with sum " << targetSum << " found: ";
+      for (int i = result.first; i <= result.second; ++i)
+      {
+        std::cout << nums[i] << " ";
+      }
+      std::cout << std::endl;
+    }
+    else
+    {
+      std::cout << "No subarray found with sum " << targetSum << std::endl;
+    }
+
+    return 0;
+  }
+
+  // Prefix Sum
+  // Input  : arr[] = {10, 20, 10, 5, 15}
+  // Output : prefixSum[] = {10, 30, 40, 45, 60}
+  // Explanation : While traversing the array, update the element by adding it with its previous element.
+  // prefixSum[0] = 10,
+  // prefixSum[1] = prefixSum[0] + arr[1] = 30,
+  // prefixSum[2] = prefixSum[1] + arr[2] = 40 and so on.
+
+  std::vector<int> calculatePrefixSum(const std::vector<int> &nums)
+  {
+    int n = nums.size();
+    std::vector<int> prefixSum(n, 0);
+
+    prefixSum[0] = nums[0];
+
+    // Calculate the prefix sum
+    for (int i = 1; i < n; ++i)
+    {
+      prefixSum[i] = prefixSum[i - 1] + nums[i];
+    }
+
+    return prefixSum;
+  }
+
+  int rangeSumQuery(const std::vector<int> &prefixSum, int start, int end)
+  {
+    if (start == 0)
+    {
+      return prefixSum[end];
+    }
+    else
+    {
+      return prefixSum[end] - prefixSum[start - 1];
+    }
+  }
+
+  // equilibrium point
+  //   Input: A[] = {-7, 1, 5, 2, -4, 3, 0}
+  // Output: 3 //index of 2
+  // 3 is an equilibrium index, because:
+  // A[0] + A[1] + A[2] = A[4] + A[5] + A[6]
+
+  int findEquilibriumPoint(int arr[], int n)
+  {
+
+    // Calculate the total sum of the array
+    int totalSum = 0;
+    for (int i = 0; i < n; ++i)
+    {
+      totalSum += arr[i];
+    }
+
+    // Initialize the left sum
+    int leftSum = 0;
+
+    // Iterate through the array to find the equilibrium point
+    for (int i = 0; i < n; ++i)
+    {
+      // Check if the current position is an equilibrium point
+      if (leftSum == totalSum - arr[i])
+      {
+        return i;
+      }
+
+      // Update the left sum for the next iteration
+      leftSum += arr[i];
+    }
+
+    // If no equilibrium point is found
+    return -1;
+  }
+
+  // Maximum Appearing Element
+
+  //   Input: L[ ] = {1, 4, 3, 1}, R[ ] = {15, 8, 5, 4}
+  // Output: 4
+
+  // Explanation: Overall ranges are: {1,2,3,4,5,6,7,8,9,10,11,12,13,14 15}, {4,5,6,7,8}, {3,4,5}, {1,2,3,4}.
+
+  // In all these ranges, 4 appears the most times.
+
+  // Input: L[ ] = {1, 5, 9, 13, 21}, R[ ] = {15, 8, 12, 20, 24}
+  // Output: 5
+  // Explanation: Overall Ranges are: {1,2,3,4,5,6,7,8,9,10,11,12,13,14 15}, {5,6,7,8}, {9,10,11,12}, {13,14,15,16,17,18,19,20},{21,22,23,24}
+  // In these ranges, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 all appear 2 times. The smallest number among all are 5.
+
+#define MAX 1000000
+  int maxAppearingElement(int start[], int end[], int n)
+  {
+    // const int N = 1001; // Assuming the range of elements is from 0 to 1000
+    // std::vector<int> frequency(N, 0);
+
+    int frequency[MAX];
+    memset(arr, 0, sizeof arr);
+
+    int maxRange = -1;
+
+    for (int i = 0; i < n; i++)
+    {
+      frequency[start[i]]++;
+      frequency[end[i] + 1]--;
+
+      if (end[i] > maxRange)
+      {
+        maxRange = end[i];
+      }
+    }
+
+    int result = 0;
+    int maxFrequency = 0;
+    int currFrequency = 0;
+
+    for (int i = 0; i < maxRange; i++)
+    {
+      currFrequency += frequency[i];
+      if (currFrequency > maxFrequency)
+      {
+        maxFrequency = currFrequency;
+        result = i;
+      }
+    }
+
+    return result;
+  }
