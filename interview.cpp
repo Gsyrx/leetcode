@@ -571,3 +571,57 @@ public:
     return maxCount;
   }
 };
+
+/*   <<<<<-------------------------- Find Words That Can Be Formed by Characters  -------------------------------------------->>>>>
+
+Example 1:
+
+Input: words = ["cat","bt","hat","tree"], chars = "atach"
+Output: 6
+Explanation: The strings that can be formed are "cat" and "hat" so the answer is 3 + 3 = 6.
+Example 2:
+
+Input: words = ["hello","world","leetcode"], chars = "welldonehoneyr"
+Output: 10
+Explanation: The strings that can be formed are "hello" and "world" so the answer is 5 + 5 = 10.
+
+*/
+
+class Solution
+{
+public:
+  bool canForm(string word, string chars)
+  {
+    unordered_map<char, int> charCount;
+    for (char c : chars)
+    {
+      charCount[c]++;
+    }
+
+    for (char c : word)
+    {
+      if (charCount[c] == 0)
+      {
+        return false;
+      }
+      charCount[c]--;
+    }
+
+    return true;
+  }
+
+  int countCharacters(vector<string> &words, string chars)
+  {
+    int totalCount = 0;
+
+    for (int i = 0; i < words.size(); i++)
+    {
+      if (canForm(words[i], chars))
+      {
+        totalCount += words[i].length();
+      }
+    }
+
+    return totalCount;
+  }
+};
