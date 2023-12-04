@@ -107,3 +107,92 @@ int maxSubarraySum(int arr[], int n, int k)
 
   return maxSum;
 }
+
+// Binary Search
+/*
+Binary Search is a powerful and efficient algorithm for finding elements in sorted arrays.
+*/
+
+int binarySearchIterative(const vector<int> &arr, int target)
+{
+  int left = 0;
+  int right = arr.size() - 1;
+
+  while (left <= right)
+  {
+    int mid = left + (right - left) / 2;
+
+    if (arr[mid] == target)
+    {
+      return mid; // Element found, return its index
+    }
+    else if (arr[mid] < target)
+    {
+      left = mid + 1; // Search the right half
+    }
+    else
+    {
+      right = mid - 1; // Search the left half
+    }
+  }
+
+  return -1; // Element not found
+}
+// or
+int binarySearchRecursive(const vector<int> &arr, int target, int left, int right)
+{
+  if (left <= right)
+  {
+    int mid = left + (right - left) / 2;
+
+    if (arr[mid] == target)
+    {
+      return mid; // Element found, return its index
+    }
+    else if (arr[mid] < target)
+    {
+      return binarySearchRecursive(arr, target, mid + 1, right); // Search the right half
+    }
+    else
+    {
+      return binarySearchRecursive(arr, target, left, mid - 1); // Search the left half
+    }
+  }
+
+  return -1; // Element not found
+}
+
+// Two Pointers Approach
+/*
+
+The Two Pointers technique is a useful approach in solving problems
+where you need to iterate through the array with two pointers.
+This technique is often used to solve problems involving
+searching, sorting, or finding a pair of elements that meet certain conditions.
+
+*/
+
+bool isPairWithSum(const vector<int> &arr, int target)
+{
+  int left = 0;
+  int right = arr.size() - 1;
+
+  while (left < right)
+  {
+    int currentSum = arr[left] + arr[right];
+
+    if (currentSum == target)
+    {
+      return true;
+    }
+    else if (currentSum < target)
+    {
+      left++; // Move the left pointer to increase the sum
+    }
+    else
+    {
+      right--; // Move the right pointer to decrease the sum
+    }
+  }
+  return false;
+}
