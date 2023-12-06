@@ -1,3 +1,8 @@
+#include <iostream>
+#include <bits/stdc++.h>
+
+using namespace std;
+
 /*   <<<<<--------------------------------------------------------------------->>>>>
 Given an integer array nums sorted in non-decreasing order,
 remove some duplicates in-place such that each unique element appears at most twice.

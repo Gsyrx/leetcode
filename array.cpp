@@ -1,3 +1,8 @@
+#include <iostream>
+#include <bits/stdc++.h>
+
+using namespace std;
+
 // 2nd largest element in an array
 // sort the array
 // sort(arr, arr + arr_size);
@@ -33,7 +38,7 @@ int findSecondLargest(int arr[], int n)
   int firstLargest = INT_MIN;
   int secondLargest = INT_MIN;
 
-  for (int i = 0; i < size; ++i)
+  for (int i = 0; i < n; ++i)
   {
     if (arr[i] > firstLargest)
     {
@@ -281,12 +286,12 @@ void printFreq(int arr[], int n)
     }
     else
     {
-      cout << "Element " << currentElement << ": " << count << " times" << endl;
+      cout << "Element " << currElement << ": " << count << " times" << endl;
       currElement = arr[i];
       count = 1;
     }
   }
-  cout << "Element " << currentElement << ": " << count << " times" << endl; // for last element
+  cout << "Element " << currElement << ": " << count << " times" << endl; // for last element
 }
 
 // stock buy and sell problem
@@ -808,7 +813,7 @@ int maxAppearingElement(int start[], int end[], int n)
   // std::vector<int> frequency(N, 0);
 
   int frequency[MAX];
-  memset(arr, 0, sizeof arr);
+  memset(frequency, 0, sizeof frequency);
 
   int maxRange = -1;
 
@@ -891,7 +896,7 @@ bool checkRotatedAndSorted(int arr[], int n)
     int index = (minIndex + i) % n;
     int prevIndex = (minIndex + i - 1) % n;
 
-    if (nums[index] < nums[prevIndex])
+    if (arr[index] < arr[prevIndex])
     {
       return false;
     }
@@ -996,4 +1001,263 @@ int longestSubarrayOfEvensAndOdds(vector<int> &arr)
   }
 
   return maxLength;
+}
+
+// Triplet in a Sorted Array
+
+bool findTriplet(int arr[], int n, int targetSum)
+{
+  for (int i = 0; i < n - 2; ++i)
+  {
+    int left = i + 1;
+    int right = n - 1;
+
+    while (left < right)
+    {
+      int currentSum = arr[i] + arr[left] + arr[right];
+
+      if (currentSum == targetSum)
+      {
+        std::cout << "Triplet found: " << arr[i] << ", " << arr[left] << ", " << arr[right] << std::endl;
+        return true;
+      }
+      else if (currentSum < targetSum)
+      {
+        ++left;
+      }
+      else
+      {
+        --right;
+      }
+    }
+  }
+
+  std::cout << "No triplet found." << std::endl;
+  return false;
+}
+
+// Intersection of two sorted arrays
+// if only unique elements are there in arr1 or arr2.
+
+std::vector<int> findIntersection(const std::vector<int> &arr1, const std::vector<int> &arr2)
+{
+  std::vector<int> intersection;
+
+  // Initialize indices for both arrays
+  int i = 0, j = 0;
+
+  // Iterate through both arrays
+  while (i < arr1.size() && j < arr2.size())
+  {
+
+    // If elements are equal, add to the intersection and move both indices
+    if (arr1[i] == arr2[j])
+    {
+      intersection.push_back(arr1[i]);
+      i++;
+      j++;
+    }
+    // If the element in the first array is smaller, move its index
+    else if (arr1[i] < arr2[j])
+    {
+      i++;
+    }
+    // If the element in the second array is smaller, move its index
+    else
+    {
+      j++;
+    }
+  }
+
+  return intersection;
+}
+
+// 2nd sol
+//  if repeating elements are also present
+void intersection(int a[], int b[], int m, int n)
+{
+  int i = 0, j = 0;
+  while (i < m && j < n)
+  {
+    if (i > 0 && a[i - 1] == a[i])
+    {
+      i++;
+      continue;
+    }
+    if (a[i] < b[j])
+    {
+      i++;
+    }
+    else if (a[i] > b[j])
+    {
+      j++;
+    }
+    else
+    {
+      cout << a[i] << " ";
+      i++;
+      j++;
+    }
+  }
+}
+
+// Union of two sorted arrays
+// if only unique elements are there in arr1 or arr2.
+std::vector<int> findUnion(const std::vector<int> &arr1, const std::vector<int> &arr2)
+{
+  std::vector<int> unionResult;
+
+  // Initialize indices for both arrays
+  int i = 0, j = 0;
+
+  // Iterate through both arrays
+  while (i < arr1.size() && j < arr2.size())
+  {
+    // If elements are equal, add one occurrence to the union and move both indices
+    if (arr1[i] == arr2[j])
+    {
+      unionResult.push_back(arr1[i]);
+      i++;
+      j++;
+    }
+    // If the element in the first array is smaller, add it to the union and move its index
+    else if (arr1[i] < arr2[j])
+    {
+      unionResult.push_back(arr1[i]);
+      i++;
+    }
+    // If the element in the second array is smaller, add it to the union and move its index
+    else
+    {
+      unionResult.push_back(arr2[j]);
+      j++;
+    }
+  }
+
+  // Add any remaining elements from the first array
+  while (i < arr1.size())
+  {
+    unionResult.push_back(arr1[i]);
+    i++;
+  }
+
+  // Add any remaining elements from the second array
+  while (j < arr2.size())
+  {
+    unionResult.push_back(arr2[j]);
+    j++;
+  }
+
+  return unionResult;
+}
+
+// 2nd sol
+//  if repeating elements are also present
+
+void printUnion(int a[], int b[], int m, int n)
+{
+
+  int i = 0, j = 0;
+  while (i < m && j < n)
+  {
+    if (i > 0 && a[i - 1] == a[i])
+    {
+      i++;
+      continue;
+    }
+    if (j > 0 && b[j - 1] == b[j])
+    {
+      j++;
+      continue;
+    }
+    if (a[i] < b[j])
+    {
+      cout << a[i] << " ";
+      i++;
+    }
+    else if (a[i] > b[j])
+    {
+      cout << b[j] << " ";
+      j++;
+    }
+    else
+    {
+      cout << a[i] << " ";
+      i++;
+      j++;
+    }
+  }
+  while (i < m)
+  {
+    if (i == 0 || a[i] != a[i - 1])
+      cout << a[i] << " ";
+    i++;
+  }
+  while (j < n)
+  {
+    if (j == 0 || b[j] != b[j - 1])
+      cout << b[j] << " ";
+    j++;
+  }
+}
+
+//  Kth Smallest Element
+
+int partition(int arr[], int l, int h)
+{
+  int pivot = arr[h];
+  int i = l - 1;
+  for (int j = l; j <= h - 1; j++)
+  {
+    if (arr[j] < pivot)
+    {
+      i++;
+      swap(arr[i], arr[j]);
+    }
+  }
+  swap(arr[i + 1], arr[h]);
+  return i + 1;
+}
+
+int kthSmallest(int arr[], int n, int k)
+{
+  int l = 0, r = n - 1;
+  while (l <= r)
+  {
+    int p = partition(arr, l, r);
+    if (p == k - 1)
+      return p;
+    else if (p > k - 1)
+      r = p - 1;
+    else
+      l = p + 1;
+  }
+  return -1;
+}
+
+// Minimum Difference in an Array
+
+int getMinDiff(int arr[], int n)
+{
+  sort(arr, arr + n);
+  int res = INT_MAX;
+
+  for (int i = 1; i < n; i++)
+  {
+    res = min(res, arr[i] - arr[i - 1]);
+  }
+  return res;
+}
+
+// Chocolate Distribution Problem
+/*find the minimum difference between the maximum and minimum number of chocolates given to any student*/
+int minDiff(int arr[], int n, int m)
+{
+  if (m > n)
+    return -1;
+  sort(arr, arr + n);
+  int res = arr[m - 1] - arr[0];
+  for (int i = 0; (i + m - 1) < n; i++)
+    res = min(res, arr[i + m - 1] - arr[i]);
+  return res;
 }
