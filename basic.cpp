@@ -48,6 +48,7 @@ int main()
 int main()
 {
 
+  // store unique elements.
   unordered_set<int> s;
   s.insert(10);
   s.insert(5);
@@ -92,4 +93,27 @@ int main()
   s.erase(s.begin(), s.end());
 
   return 0;
+}
+
+// unordered_set<int> uniqueElements(nums.begin(), nums.end()); // vector sort
+// unordered_set<int> uniqueElements(nums, nums+n); // array sort
+
+// Unordered_map in C++ STL
+
+int main()
+{
+  //  Create an unordered_map with keys as strings and values as integers
+  unordered_map<string, int> myMap;
+
+  // Insert key-value pairs into the unordered_map
+  myMap["one"] = 1;
+  myMap["two"] = 2;
+  myMap["three"] = 3;
+
+  myMap.erase("two");
+
+  for (const auto &pair : myMap)
+  {
+    std::cout << " {" << pair.first << ": " << pair.second << "}";
+  }
 }

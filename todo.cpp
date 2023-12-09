@@ -14,3 +14,10 @@ Minimum Consecutive Flips
     counting sort
     radix sort
     bucket sort
+
+    largest subarray with given sum
+    Longest subarray with equal number of zero and one
+    Longest common span with same sum in binary arrays
+    Count Distinct Elements In Every Window
+    Subarray range with given sum
+    Zero Sum Subarrays
