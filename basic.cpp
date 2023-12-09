@@ -117,3 +117,51 @@ int main()
     std::cout << " {" << pair.first << ": " << pair.second << "}";
   }
 }
+
+// string
+
+int main()
+{
+  string str = "geeksforgeeks";
+  int count[26] = {0};
+
+  for (int i = 0; i < str.length(); i++)
+  {
+    count[str[i]]++;
+  }
+
+  for (int i = 0; i < 26; i++)
+  {
+    if (count[i] > 0)
+    {
+      cout << char(i + 'a') << " " << count << endl;
+    }
+  }
+}
+
+// bool visited[256];
+// fill(visited, visited + 256, false);
+
+// std::string firstName = "Gaurav";
+// std::string lastName = "Verma";
+// std::string fullName = firstName + " " + lastName;
+// int length = fullName.length(); // or fullName.size();
+// char firstChar = fullName[0];
+// std::string sub = fullName.substr(0, 4); // Extracts characters from index 0 to 3
+// size_t pos = fullName.find("Doe");       // Returns the position of the first occurrence of "Doe"
+// fullName.replace(pos, 3, "Smith");       // Replaces "Doe" with "Smith"
+// std::string str1 = "apple";
+// std::string str2 = "banana";
+
+// if (str1 == str2)
+// {
+//   std::cout << "Strings are equal." << std::endl;
+// }
+// else
+// {
+//   std::cout << "Strings are not equal." << std::endl;
+// }
+// for (char c : fullName)
+// {
+//   std::cout << c << " ";
+// }

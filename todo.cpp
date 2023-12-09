@@ -21,3 +21,8 @@ Minimum Consecutive Flips
     Count Distinct Elements In Every Window
     Subarray range with given sum
     Zero Sum Subarrays
+
+    Rabin Karp Algorithm
+    KMP Algorithm
+    Isomorphic Strings
+    Smallest window in a string containing all the characters of another string
