@@ -1261,3 +1261,111 @@ int minDiff(int arr[], int n, int m)
     res = min(res, arr[i + m - 1] - arr[i]);
   return res;
 }
+
+// triplet with zero sum
+
+bool hasTripletWithZeroSum(int arr[], int n)
+{
+  int start;
+  int end;
+
+  sort(arr, arr + n);
+
+  for (int i = 0; i < n - 2; i++)
+  {
+    start = i + 1;
+    end = n - 1;
+
+    while (start < end)
+    {
+      if (arr[i] + arr[start] + arr[end] == 0)
+      {
+        return true;
+      }
+      else if (arr[i] + arr[start] + arr[end] > 0)
+      {
+        end--;
+      }
+      else
+      {
+        start++;
+      }
+    }
+  }
+
+  return false;
+}
+
+// Closet 0s 1s and 2s
+// Given an array of 0s, 1s, and 2s.
+// Arrange the array elements such that all 0s come first, followed by all the 1s and then, all the 2s.
+
+void sortColors(int arr[], int n)
+{
+  int low = 0;
+  int i = 0;
+  int high = n - 1;
+
+  while (i <= high)
+  {
+    if (arr[i] == 0)
+    {
+      swap(arr[i], arr[low]);
+      i++;
+      low++;
+    }
+    else if (arr[i] == 1)
+    {
+      i++;
+    }
+    else
+    {
+      swap(arr[i], arr[high]);
+      high--;
+    }
+  }
+}
+
+// Count the number of possible triangles
+
+// Input:
+// n = 5
+// arr[] = {6, 4, 9, 7, 8}
+// Output:
+// 10
+// Explanation:
+// There are 10 triangles
+// possible  with the given elements like
+// (6,4,9), (6,7,8),...
+
+int countTriangles(int nums, int n)
+{
+  sort(nums, nums + n);
+  int count = 0;
+  int left = 0;
+  int right;
+
+  // Fix one element and use two pointers for the other two elements
+  for (int i = n - 1; i >= 2; --i)
+  {
+    left = 0, right = i - 1;
+
+    while (left < right)
+    {
+      // Check if the triplet forms a valid triangle
+      if (nums[left] + nums[right] > nums[i])
+      {
+        // If yes, all triplets with nums[left] and nums[right] as sides are valid
+        count += (right - left);
+        right--;
+      }
+      else
+      {
+        // If no, move to the next possible combination
+        left++;
+      }
+    }
+  }
+
+  return count;
+}
