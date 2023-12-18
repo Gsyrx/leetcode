@@ -487,3 +487,513 @@ Node *reverse(Node *head)
   }
   return prev;
 }
+
+// Remove duplicates from a sorted Singly Linked List
+
+void removeDuplicates(Node *head)
+{
+  Node *current = head;
+
+  while (current != NULL && current->next != NULL)
+  {
+    if (current->data == current->next->data)
+    {
+      Node *duplicate = current->next;
+      current->next = current->next->next;
+      delete duplicate;
+    }
+    else
+    {
+      current = current->next;
+    }
+  }
+}
+
+// reverse in size of k
+// recursive
+Node *reverseK(Node *head, int k)
+{
+
+  Node *curr = head, *prev = NULL, *next = NULL;
+  int count = 0;
+
+  while (curr != NULL && count < k)
+  {
+    next = curr->next;
+    curr->next = prev;
+    prev = curr;
+    curr = next;
+    count++;
+  }
+
+  if (next != NULL)
+  {
+    Node *rest_head = reverseK(next, k);
+    head->next = rest_head;
+  }
+
+  return prev;
+}
+
+// iterative
+Node *reverseK(Node *head, int k)
+{
+
+  Node *curr = head, *prevFirst = NULL;
+  bool isFirstPass = true;
+  while (curr != NULL)
+  {
+    Node *first = curr, *prev = NULL;
+    int count = 0;
+    while (curr != NULL && count < k)
+    {
+      Node *next = curr->next;
+      curr->next = prev;
+      prev = curr;
+      curr = next;
+      count++;
+    }
+    if (isFirstPass)
+    {
+      head = prev;
+      isFirstPass = false;
+    }
+    else
+    {
+      prevFirst->next = prev;
+    }
+    prevFirst = first;
+  }
+  return head;
+}
+
+// detact loop
+// method 1
+
+bool isLoop(Node *head)
+{
+  Node *temp = new Node(0);
+  Node *curr = head;
+  while (curr != NULL)
+  {
+    if (curr->next == NULL)
+      return false;
+    if (curr->next == temp)
+      return true;
+    Node *curr_next = curr->next;
+    curr->next = temp;
+    curr = curr_next;
+  }
+  return false;
+}
+
+// method 2
+
+bool isLoop(Node *head)
+{
+  unordered_set<Node *> s;
+  for (Node *curr = head; curr != NULL; curr = curr->next)
+  {
+    if (s.find(curr) != s.end())
+      return true;
+    s.insert(curr);
+  }
+  return false;
+  // unordered_set<Node *> visited;
+  // while (head != NULL)
+  // {
+  //   // If the current node is already in the set, a loop is detected
+  //   if (visited.find(head) != visited.end())
+  //   {
+  //     return true;
+  //   }
+
+  //   // Add the current node to the set
+  //   visited.insert(head);
+
+  //   // Move to the next node
+  //   head = head->next;
+  // }
+  // return false;
+}
+
+//  Floyd's cycle-finding algorithm
+
+bool detectLoop(Node *head)
+{
+  // Initialize two pointers, slow and fast
+  Node *slow = head;
+  Node *fast = head;
+
+  // Traverse the linked list
+  while (fast != nullptr && fast->next != nullptr)
+  {
+    slow = slow->next;       // Move slow pointer by one step
+    fast = fast->next->next; // Move fast pointer by two steps
+
+    // Check if the pointers meet (loop detected)
+    if (slow == fast)
+    {
+      return true;
+    }
+  }
+
+  // If the loop is not detected, return false
+  return false;
+}
+
+// Function to insert a node in the middle of a linked list
+void insertInMiddle(Node *&head, int value)
+{
+  Node *slow = head;
+  Node *fast = head;
+  Node *newNode = new Node(value);
+
+  // Find the middle of the linked list using the slow and fast pointers
+  while (fast != nullptr && fast->next != nullptr)
+  {
+    slow = slow->next;
+    fast = fast->next->next;
+  }
+
+  // Insert the new node after the middle node
+  newNode->next = slow->next;
+  slow->next = newNode;
+}
+
+int getIntersection(Node *head1, Node *head2)
+{
+  unordered_set<Node *> s;
+  Node *curr = head1;
+  while (curr != NULL)
+  {
+    s.insert(curr);
+    curr = curr->next;
+  }
+  curr = head2;
+  while (curr != NULL)
+  {
+    if (s.find(curr) != s.end())
+      return curr->data;
+    curr = curr->next;
+  }
+  return -1;
+}
+
+// Function to perform pairwise swapping of nodes
+Node *pairwiseSwap(Node *head)
+{
+  // If the list is empty or has only one node, no swapping is needed
+  if (head == nullptr || head->next == nullptr)
+  {
+    return head;
+  }
+
+  // Initialize pointers for swapping
+  Node *prev = nullptr;
+  Node *current = head;
+  Node *nextNode = nullptr;
+
+  // Traverse the list and swap adjacent nodes
+  while (current != nullptr && current->next != nullptr)
+  {
+    nextNode = current->next;
+    current->next = nextNode->next;
+    nextNode->next = current;
+
+    // Update the head if the swap involves the first node
+    if (prev == nullptr)
+    {
+      head = nextNode;
+    }
+    else
+    {
+      prev->next = nextNode;
+    }
+
+    // Move to the next pair
+    prev = current;
+    current = current->next;
+  }
+
+  return head;
+}
+
+// another sol (we can also use reverse the linked list of size k and in place of size k we can pass 2)
+
+// 2nd sol but not used because we are swapping the data (may be the node contains the large amount of data)
+void pairwiseSwap(Node *head)
+{
+  Node *curr = head;
+  while (curr != NULL && curr->next != NULL)
+  {
+    swap(curr->data, curr->next->data);
+    curr = curr->next->next;
+  }
+}
+
+// Function to merge two sorted linked lists
+Node *mergeSortedLists(Node *list1, Node *list2)
+{
+  // Create a dummy node to simplify code
+  Node *dummy = new Node(0);
+  Node *current = dummy;
+
+  // Traverse both lists and compare nodes
+  while (list1 != nullptr && list2 != nullptr)
+  {
+    if (list1->data < list2->data)
+    {
+      current->next = list1;
+      list1 = list1->next;
+    }
+    else
+    {
+      current->next = list2;
+      list2 = list2->next;
+    }
+    current = current->next;
+  }
+
+  // If one list is not empty, append the remaining nodes
+  if (list1 != nullptr)
+  {
+    current->next = list1;
+  }
+  else
+  {
+    current->next = list2;
+  }
+
+  // Save the merged list, excluding the dummy node
+  Node *mergedList = dummy->next;
+
+  // Delete the dummy node to avoid memory leaks
+  delete dummy;
+
+  return mergedList;
+}
+
+// Palindrome Linked List
+
+bool isPalindrome(Node *head)
+{
+  stack<char> st;
+  for (Node *curr = head; curr != NULL; curr = curr->next)
+    st.push(curr->data);
+  for (Node *curr = head; curr != NULL; curr = curr->next)
+  {
+    if (st.top() != curr->data)
+      return false;
+    st.pop();
+  }
+  return true;
+}
+
+// 2nd sol
+Node *reverseList(Node *head)
+{
+  if (head == NULL || head->next == NULL)
+    return head;
+  Node *rest_head = reverseList(head->next);
+  Node *rest_tail = head->next;
+  rest_tail->next = head;
+  head->next = NULL;
+  return rest_head;
+}
+
+bool isPalindrome(Node *head)
+{
+  if (head == NULL)
+    return true;
+  Node *slow = head, *fast = head;
+  while (fast->next != NULL && fast->next->next != NULL)
+  {
+    slow = slow->next;
+    fast = fast->next->next;
+  }
+  Node *rev = reverseList(slow->next);
+  Node *curr = head;
+  while (rev != NULL)
+  {
+    if (rev->data != curr->data)
+      return false;
+    rev = rev->next;
+    curr = curr->next;
+  }
+  return true;
+}
+
+// Function to detect and find the length of a loop in a linked list
+int findLoopLength(Node *head)
+{
+  Node *slow = head;
+  Node *fast = head;
+
+  // Detect the loop using Floyd's cycle-finding algorithm
+  while (fast != nullptr && fast->next != nullptr)
+  {
+    slow = slow->next;
+    fast = fast->next->next;
+
+    if (slow == fast)
+    {
+      // Loop detected, find the length of the loop
+      int length = 1;
+      slow = slow->next;
+
+      while (slow != fast)
+      {
+        slow = slow->next;
+        length++;
+      }
+
+      return length;
+    }
+  }
+
+  // No loop detected
+  return 0;
+}
+
+// add two numbers represented by linked lists
+//  Function to reverse a linked list
+Node *reverseList(Node *head)
+{
+  Node *prev = nullptr;
+  Node *current = head;
+  Node *nextNode = nullptr;
+
+  while (current != nullptr)
+  {
+    nextNode = current->next;
+    current->next = prev;
+    prev = current;
+    current = nextNode;
+  }
+
+  return prev;
+}
+
+// Function to add two numbers represented by linked lists
+Node *addNumbers(Node *l1, Node *l2)
+{
+  // Reverse the input lists to simplify addition
+  l1 = reverseList(l1);
+  l2 = reverseList(l2);
+
+  Node *dummy = new Node(0); // Dummy node to simplify code
+  Node *current = dummy;
+  int carry = 0;
+
+  while (l1 != nullptr || l2 != nullptr || carry != 0)
+  {
+    int sum = (l1 ? l1->data : 0) + (l2 ? l2->data : 0) + carry;
+    carry = sum / 10;
+
+    current->next = new Node(sum % 10);
+    current = current->next;
+
+    if (l1)
+      l1 = l1->next;
+    if (l2)
+      l2 = l2->next;
+  }
+
+  // Reverse the result list before returning
+  Node *result = reverseList(dummy->next);
+
+  // Free the memory allocated for the dummy node
+  delete dummy;
+
+  return result;
+}
+
+// Function to sort a linked list containing 0s, 1s, and 2s
+Node *sortLinkedList(Node *head)
+{
+  if (head == nullptr || head->next == nullptr)
+  {
+    return head;
+  }
+
+  Node *dummyZero = new Node(0);
+  Node *dummyOne = new Node(0);
+  Node *dummyTwo = new Node(0);
+
+  Node *zero = dummyZero;
+  Node *one = dummyOne;
+  Node *two = dummyTwo;
+
+  Node *current = head;
+
+  // Traverse the list and partition nodes based on their values
+  while (current != nullptr)
+  {
+    if (current->data == 0)
+    {
+      zero->next = current;
+      zero = zero->next;
+    }
+    else if (current->data == 1)
+    {
+      one->next = current;
+      one = one->next;
+    }
+    else
+    {
+      two->next = current;
+      two = two->next;
+    }
+
+    current = current->next;
+  }
+
+  // Combine the three partitions
+  zero->next = dummyOne->next ? dummyOne->next : dummyTwo->next;
+  one->next = dummyTwo->next;
+
+  // Update the next pointer of the last node to nullptr
+  two->next = nullptr;
+
+  // Save the new head
+  Node *sortedList = dummyZero->next;
+
+  // Free the memory allocated for dummy nodes
+  delete dummyZero;
+  delete dummyOne;
+  delete dummyTwo;
+
+  return sortedList;
+}
+
+// Function to remove duplicates from an unsorted linked list
+void removeDuplicates(Node *head)
+{
+  if (head == nullptr || head->next == nullptr)
+  {
+    return;
+  }
+
+  std::unordered_set<int> uniqueValues;
+  Node *current = head;
+  Node *previous = nullptr;
+
+  while (current != nullptr)
+  {
+    // If the current value is already in the set, remove the current node
+    if (uniqueValues.count(current->data))
+    {
+      previous->next = current->next;
+      delete current;
+      current = previous->next;
+    }
+    else
+    {
+      // Add the current value to the set and move to the next node
+      uniqueValues.insert(current->data);
+      previous = current;
+      current = current->next;
+    }
+  }
+}

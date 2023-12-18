@@ -26,3 +26,11 @@ Minimum Consecutive Flips
     KMP Algorithm
     Isomorphic Strings
     Smallest window in a string containing all the characters of another string
+
+    Segregate Even and Odd Nodes
+    Clone a linked list with Random Pointer in C++ LRU Cache Design
+    Swap Kth nodes from ends
+    Merge Sort on Doubly Linked List
+
+    Implement two Stacks in an Array
+    Implement K Stacks in an Array

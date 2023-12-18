@@ -457,3 +457,75 @@ void qSort(int arr[], int l, int h)
     qSort(arr, p + 1, h);
   }
 }
+
+//  Floyd's cycle-finding algorithm
+
+bool detectLoop(Node *head)
+{
+  // Initialize two pointers, slow and fast
+  Node *slow = head;
+  Node *fast = head;
+
+  // Traverse the linked list
+  while (fast != nullptr && fast->next != nullptr)
+  {
+    slow = slow->next;       // Move slow pointer by one step
+    fast = fast->next->next; // Move fast pointer by two steps
+
+    // Check if the pointers meet (loop detected)
+    if (slow == fast)
+    {
+      return true;
+    }
+  }
+
+  // If the loop is not detected, return false
+  return false;
+}
+
+// detact and remove loop
+void detectRemoveLoop(Node *head)
+{
+  Node *slow = head, *fast = head;
+
+  while (fast != NULL && fast->next != NULL)
+  {
+    slow = slow->next;
+    fast = fast->next->next;
+    if (slow == fast)
+    {
+      break;
+    }
+  }
+  if (slow != fast)
+    return;
+  slow = head;
+  while (slow->next != fast->next)
+  {
+    slow = slow->next;
+    fast = fast->next;
+  }
+  fast->next = NULL;
+}
+
+// Function to delete a node with only a pointer to it
+void deleteNode(Node *nodeToDelete)
+{
+  if (nodeToDelete == nullptr || nodeToDelete->next == nullptr)
+  {
+    // Cannot delete the last node or a nullptr
+    std::cerr << "Cannot delete the last node or a nullptr.\n";
+    return;
+  }
+
+  Node *nextNode = nodeToDelete->next;
+
+  // Copy data of the next node to the current node
+  nodeToDelete->data = nextNode->data;
+
+  // Update the next pointer of the current node to skip the next node
+  nodeToDelete->next = nextNode->next;
+
+  // Delete the next node
+  delete nextNode;
+}
